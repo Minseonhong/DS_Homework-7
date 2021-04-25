@@ -39,6 +39,7 @@ void printList(headNode* h);
 
 int main()
 {
+	printf("[----- [민선홍] [2018038028] -----");
 	char command;
 	int key;
 	headNode* headnode=NULL;
@@ -109,10 +110,28 @@ int main()
 
 int initialize(headNode** h) {
 
+	if(*h!=NULL) //headNode가 NULL이 아니면, freeNode를 호출하여 할당된 메모리 모두 해제
+		freeList(*h);
+
+	*h = (headNode*)malloc(sizeof(headNode)); // headNode에 대한 메모리를 직접 *h에 할당
+	(*h) -> first = NULL;
+
+
 	return 1;
 }
 
 int freeList(headNode* h){
+
+	listNode *p = h->first;
+
+	listNode *prev = NULL;
+	while (p != NULL)
+	{
+		prev = p;
+		p = p -> rlink;
+		free(prev);
+	}
+	free(h);
 	return 0;
 }
 
@@ -146,6 +165,10 @@ void printList(headNode* h) {
  * list에 key에 대한 노드하나를 추가
  */
 int insertLast(headNode* h, int key) {
+
+	listNode* node = (listNode*)malloc(sizeof(listNode));
+
+
 
 	return 0;
 }
@@ -192,6 +215,7 @@ int invertList(headNode* h) {
 
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(headNode* h, int key) {
+
 
 	return 0;
 }
