@@ -56,6 +56,7 @@ int main()
 		printf("----------------------------------------------------------------\n");
 
 		printf("Command = ");
+		fflush(stdout);
 		scanf(" %c", &command); // command값 입력
 
 		switch(command) { // command의 입력 받은 값에 따라 switch 문 실행
@@ -67,16 +68,19 @@ int main()
 			break;
 		case 'i': case 'I':
 			printf("Your Key = ");
+			fflush(stdout);
 			scanf("%d", &key); // key의 값을 요청받음
 			insertNode(headnode, key); // 노드의 값을 넣는 함수 실행
 			break;
 		case 'd': case 'D':
 			printf("Your Key = ");
+			fflush(stdout);
 			scanf("%d", &key); // key의 값을 요청받음
 			deleteNode(headnode, key); // 입력받은 노드의 값을 가지고 있는 노드 삭제하는 함수 실행
 			break;
 		case 'n': case 'N':
 			printf("Your Key = ");
+			fflush(stdout);
 			scanf("%d", &key); // key의 값을 요청받음
 			insertLast(headnode, key); // 연결리스트 맨 뒤에 값 추가하는 함수 실행
 			break;
@@ -85,6 +89,7 @@ int main()
 			break;
 		case 'f': case 'F':
 			printf("Your Key = ");
+			fflush(stdout);
 			scanf("%d", &key); // key의 값을 요청받음
 			insertFirst(headnode, key); // 연결리스트 맨 처음에 값 추가하는 함수 실행
 			break;
@@ -298,27 +303,34 @@ int insertNode(headNode* h, int key) {
 
 	else
 	{
-		prev = p; // prev에 p의 값 대입
-		p = p -> rlink; // p에 p -> rlink 값 대입
+		while(1) // 반복문 실행
 
-		if (prev -> key >= node -> key) // prev -> key의 값이 node -> key 값보다 크거나 같으면
 		{
-			node -> rlink = h -> first; // node -> rlink에 헤더노드 대입
-			h -> first = node; // 헤더노드에 node 값 대입
-			node -> llink = h -> first; // node -> llink에 node의 값이 들어가 있는 헤더노드 대입
+			prev = p; // prev에 p의 값 대입
+			p = p -> rlink; // p에 p -> rlink 값 대입
+				if (prev -> key >= node -> key) // prev -> key의 값이 node -> key 값보다 크거나 같으면
+				{
+					node -> rlink = h -> first; // node -> rlink에 헤더노드 대입
+					h -> first = node; // 헤더노드에 node 값 대입
+					node -> llink = h -> first; // node -> llink에 node의 값이 들어가 있는 헤더노드 대입
+					break;
+				}
+				else if (p == NULL) // p가 NULL일 경우
+				{
+					prev -> rlink = node; // prev -> rlink에 node의 값 대입
+					node -> llink = prev; // node -> llink에 prev의 값 대입
+					break;
+				}
+				else if (p -> key >= node -> key) // p -> key의 값이  node -> key값 보다 크거나 같으면
+				{
+					node -> rlink = p; // node -> rlink에 p의 값 대입
+					node -> llink = prev; // node -> llink에 prev의 값 대입
+					prev -> rlink = node; // prev -> rlink에 node의 값 대입
+					p -> llink = node; // p -> llink에 node의 값 대입
+					break;
+				}
 		}
-		else if (p == NULL) // p가 NULL일 경우
-		{
-			prev -> rlink = node; // prev -> rlink에 node의 값 대입
-			node -> llink = prev; // node -> llink에 prev의 값 대입
-		}
-		else if (p -> key >= node -> key) // p -> key의 값이  node -> key값 보다 크거나 같으면
-		{
-			node -> rlink = p; // node -> rlink에 p의 값 대입
-			node -> llink = prev; // node -> llink에 prev의 값 대입
-			prev -> rlink = node; // prev -> rlink에 node의 값 대입
-			p -> llink = node; // p -> llink에 node의 값 대입
-		}
+
 	}
 	return 0;
 }
@@ -339,7 +351,7 @@ int deleteNode(headNode* h, int key) {
 		printf("키와 같은 값을 찾을 수 없습니다.");
 		return 0;
 	}
-	else // 아니면
+	while(1) // 반복문 실행
 	{
 		prev = p; // prev에 p 값 대입
 		p = p -> rlink; // p에 p -> rlink의 값 대입
@@ -349,10 +361,12 @@ int deleteNode(headNode* h, int key) {
 			del = prev; // del에 prev 값 대입
 			free(del); // del 메모리 해제
 			h -> first = p; // 헤더노드에 p의 값 대입
+			break;
 		}
 		else if(prev -> rlink == NULL) // prev -> rlink가 NULL일 경우 없다는 문구 출력
 		{
 			printf("키와 같은 값을 찾을 수 없습니다.");
+			break;
 		}
 		else if(p -> key == key) // p -> key의 값이 key와 같을 경우
 		{
@@ -369,10 +383,12 @@ int deleteNode(headNode* h, int key) {
 				del = p; // del에 p의 값 대입
 				free(del); // p의 값이 들어가있는 del 메모리 해제
 			}
+			break;
 		}
 		else if (p -> rlink == NULL) // p -> rlink의 값이 NULL이면 없다는 문구 출력
 		{
 			printf("키와 같은 값을 찾을 수 없습니다.");
+			break;
 		}
 	}
 
