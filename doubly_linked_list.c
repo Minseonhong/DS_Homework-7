@@ -167,9 +167,28 @@ void printList(headNode* h) {
 int insertLast(headNode* h, int key) {
 
 	listNode* node = (listNode*)malloc(sizeof(listNode));
+	node -> key = key;
+	node -> rlink = NULL;
 
+	listNode *p = h -> first;
 
+	if(h -> first == NULL)
+	{
+		node -> rlink = h -> first;
+		h -> first = node;
+		node -> llink = h -> first;
 
+		return 0;
+	}
+	else
+	{
+		while(p -> rlink != NULL)
+		{
+			p = p -> rlink;
+		}
+		p -> rlink = node;
+		node -> llink = p;
+	}
 	return 0;
 }
 
@@ -180,7 +199,19 @@ int insertLast(headNode* h, int key) {
  */
 int deleteLast(headNode* h) {
 
+	listNode *del = (listNode*)malloc(sizeof(listNode));
+	listNode *p = h -> first;
+	listNode *prev = NULL;
 
+	while(p -> rlink != NULL)
+	{
+		prev = p;
+		p = p -> rlink;
+	}
+
+	del = p;
+	free(del);
+	prev -> rlink = NULL;
 	return 0;
 }
 
