@@ -259,6 +259,18 @@ int deleteFirst(headNode* h) {
  */
 int invertList(headNode* h) {
 
+	listNode *p, *q, *r;
+	p = h -> first;
+	q = NULL;
+	r = NULL;
+	while (p != NULL)
+	{
+		r = q;
+		q = p;
+		p = p -> rlink;
+		q -> rlink = r;
+	}
+	h -> first = q;
 	return 0;
 }
 
@@ -267,7 +279,47 @@ int invertList(headNode* h) {
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(headNode* h, int key) {
 
+	listNode *node = (listNode*)malloc(sizeof(listNode));
+	node -> key = key;
+	node -> rlink = NULL;
 
+	listNode* p;
+	p = h -> first;
+	listNode *prev;
+	prev = NULL;
+
+	if( h -> first == NULL)
+	{
+		node -> rlink = h -> first;
+		h -> first = node;
+		node -> llink = h -> first;
+		return 0;
+	}
+
+	else
+	{
+		prev = p;
+		p = p -> rlink;
+
+		if (prev -> key >= node -> key)
+		{
+			node -> rlink = h -> first;
+			h -> first = node;
+			node -> llink = h -> first;
+		}
+		else if (p == NULL)
+		{
+			prev -> rlink = node;
+			node -> llink = prev;
+		}
+		else if (p -> key >= node -> key)
+		{
+			node -> rlink = p;
+			node -> llink = prev;
+			prev -> rlink = node;
+			p -> llink = node;
+		}
+	}
 	return 0;
 }
 
@@ -276,6 +328,53 @@ int insertNode(headNode* h, int key) {
  * list에서 key에 대한 노드 삭제
  */
 int deleteNode(headNode* h, int key) {
+
+	listNode *del = (listNode*)malloc(sizeof(listNode));
+	listNode *prev;
+	listNode *p;
+	prev = NULL;
+	p = h -> first;
+
+	if(h -> first == NULL){
+		printf("키와 같은 값을 찾을 수 없습니다.");
+		return 0;
+	}
+	else
+	{
+		prev = p;
+		p = p -> rlink;
+
+		if(prev -> key == key)
+		{
+			del = prev;
+			free(del);
+			h -> first = p;
+		}
+		else if(prev -> rlink == NULL)
+		{
+			printf("키와 같은 값을 찾을 수 없습니다.");
+		}
+		else if(p -> key == key)
+		{
+			prev -> rlink = p -> rlink;
+
+			if(p -> rlink == NULL)
+			{
+				del = p;
+				free(del);
+			}
+			else
+			{
+				p -> rlink -> llink = prev;
+				del = p;
+				free(del);
+			}
+		}
+		else if (p -> rlink == NULL)
+		{
+			printf("키와 같은 값을 찾을 수 없습니다.");
+		}
+	}
 
 	return 1;
 }
